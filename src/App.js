@@ -2,33 +2,39 @@ import "./App.css";
 import React, { useEffect, useState } from "react";
 import { firestore } from "./firebase";
 
-function App() {
-  const [message, setMessage] = useState([]);
+export default function App() {
+  const [tweets, setTweets] = useState([]);
 
   useEffect(() => {
   firestore.collection("tweets")
   .get()
   .then((snapshot) => {
-    snapshot.forEach((doc) => {
-    console.log(doc.data());
-    setMessage(doc.data());
+    const tweets = snapshot.docs.map((doc) => {
+      return {
+        tweet: doc.data().tweet,
+        autor: doc.data().autor,
+        id: doc.id
+      }
+    })
+    setTweets(tweets);
     });
-  }, [message])
+  }, [])
  }
 
-  )
 
-  console.log(message);
 
   return (
     <div className="App">
-      <div>
-        <p>Esto es un texto</p>
-        <p>{message.autor}</p>
-        <p>{message.libro}</p>
-      </div>
+      <h1>Tweets:</h1>
+      {tweets.map((tweet) => {
+        return (
+          <div key={tweet.id}>
+            <h1>{tweet.tweet}</h1>
+            <h4>por: {tweet.autor}</h4>
+          </div>
+        );
+      })}
     </div>
   );
-}
 
-export default App;
+
