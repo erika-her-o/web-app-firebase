@@ -1,35 +1,32 @@
-import logo from "./logo.svg";
 import "./App.css";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { firestore } from "./firebase";
 
 function App() {
+  const [message, setMessage] = useState([]);
+
   useEffect(() => {
   firestore.collection("tweets")
   .get()
   .then((snapshot) => {
     snapshot.forEach((doc) => {
     console.log(doc.data());
+    setMessage(doc.data());
     });
-  }, [])
+  }, [message])
  }
+
   )
+
+  console.log(message);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div>
+        <p>Esto es un texto</p>
+        <p>{message.autor}</p>
+        <p>{message.libro}</p>
+      </div>
     </div>
   );
 }
