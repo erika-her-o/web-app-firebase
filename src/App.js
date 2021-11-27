@@ -34,8 +34,27 @@ export default function App() {
     setTweet(newTweet);
   }
 
-  console.log(tweet);
-
+  // console.log(tweet);
+  
+  const sendTweet = (e) => {
+    e.preventDefault();
+    
+    let enviarTweet = firestore.collection("tweets").add(tweet);
+    
+    let solicitarDocumento = enviarTweet.then((docRef) => {
+     
+    return docRef.get();
+    });
+   
+    solicitarDocumento.then((doc) => {
+      let nuevoTweet = {
+        tweet: doc.data().tweet,
+        autor: doc.data().autor,
+        id: doc.id
+      };
+      setTweets([nuevoTweet, ...tweets]);
+    });
+  };
 
  return (
   <div className="App">
@@ -44,7 +63,7 @@ export default function App() {
       
       <div className="input-group"> 
         <input name="autor"  onChange={handleChange} value={tweet.autor} type="text" placeholder="Written by"/>
-        <button>send tweet</button>
+        <button onClick={sendTweet}>send tweet</button>
       </div>
     </form>
 
