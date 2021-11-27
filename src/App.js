@@ -56,6 +56,14 @@ export default function App() {
     });
   };
 
+  const deleteTweet = (id) => {
+    const nuevosTweets = tweets.filter((tweet) => {
+      return tweet.id !== id;
+    })
+    setTweets(nuevosTweets);
+    firestore.doc(`tweets/${id}`).delete();
+  }
+
  return (
   <div className="App">
     <form className="form">
@@ -67,15 +75,19 @@ export default function App() {
       </div>
     </form>
 
-    <h1>Tweets:</h1>
-    {tweets.map((tweet) => {
-      return (
-        <div key={tweet.id}>
-          <h1>{tweet.tweet}</h1>
-          <h4>por: {tweet.autor}</h4>
-        </div>
-      );
-    })}
+    <div className="container-tweet">
+      <h1>Tweets:</h1>
+      {tweets.map((tweet) => {
+        return (
+          <div  className="message" key={tweet.id}>
+            <h1>{tweet.tweet}
+                <span onClick={() => deleteTweet(tweet.id)} className="delete">X</span>
+            </h1>
+            <h4>por: {tweet.autor}</h4>
+          </div>
+        );
+      })}
+    </div>
   </div>
 );
 }
