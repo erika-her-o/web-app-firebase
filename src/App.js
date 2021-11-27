@@ -4,6 +4,11 @@ import { firestore } from "./firebase";
 
 export default function App() {
   const [tweets, setTweets] = useState([]);
+  const [tweet, setTweet] = useState({
+    tweet: "",
+    autor: ""
+  });
+
   useEffect(() => {
     firestore
       .collection("tweets")
@@ -20,8 +25,21 @@ export default function App() {
       });
   }, []);
 
+  const handleAutorChange = (e) => {};
+  const handleTweetChange = (e) => {};
+
+
  return (
   <div className="App">
+    <form className="form">
+      <textarea onChange={handleTweetChange} value={tweet.tweet} rows="5" cols="30" placeholder= "Write something here"/>
+      
+      <div className="input-group"> 
+        <input onChange={handleAutorChange} value={tweet.autor} type="text" placeholder="Written by"/>
+        <button>send tweet</button>
+      </div>
+    </form>
+
     <h1>Tweets:</h1>
     {tweets.map((tweet) => {
       return (
