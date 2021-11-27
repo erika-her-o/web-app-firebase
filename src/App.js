@@ -25,17 +25,25 @@ export default function App() {
       });
   }, []);
 
-  const handleAutorChange = (e) => {};
-  const handleTweetChange = (e) => {};
+  const handleChange = (e) => {
+    let newTweet = {
+      ...tweet,
+      [e.target.name]: e.target.value
+    }
+
+    setTweet(newTweet);
+  }
+
+  console.log(tweet);
 
 
  return (
   <div className="App">
     <form className="form">
-      <textarea onChange={handleTweetChange} value={tweet.tweet} rows="5" cols="30" placeholder= "Write something here"/>
+      <textarea name="tweet" onChange={handleChange} value={tweet.tweet} rows="5" cols="30" placeholder= "Write something here"/>
       
       <div className="input-group"> 
-        <input onChange={handleAutorChange} value={tweet.autor} type="text" placeholder="Written by"/>
+        <input name="autor"  onChange={handleChange} value={tweet.autor} type="text" placeholder="Written by"/>
         <button>send tweet</button>
       </div>
     </form>
