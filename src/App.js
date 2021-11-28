@@ -16,7 +16,8 @@ export default function App() {
           return {
             tweet: doc.data().tweet,
             autor: doc.data().autor,
-            id: doc.id
+            id: doc.id,
+            likes: doc.data().likes
           };
         });
         setTweets(tweets);
@@ -37,17 +38,20 @@ export default function App() {
   
   const sendTweet = (e) => {
     e.preventDefault();
-    
+    // enviamos el tweet a la colección
     firestore.collection("tweets").add(tweet);
   };
 
   const deleteTweet = (id) => {
+    // borramos el tweet en firebase
     firestore.doc(`tweets/${id}`).delete();
-  }
+  };
 
-  const actualizarDoc = (id, algunParametro) => {
-    firestore.doc(`tweets/${id}`).update({unaPropiedad: algunParametro})
-  }
+  const likeTweet = (id, likes) => {
+    if (!likes) likes = 0;
+    // actualizamos el tweet en firebase
+    firestore.doc(`tweets/${id}`).update({ likes: likes + 1 });
+  };
 
  return (
   <div className="App">
@@ -70,9 +74,9 @@ export default function App() {
             </h1>
             <h4>por: {tweet.autor}</h4>
             {/* <span>{tweet.likes}</span> */}
-            <span className="likes"> 
+            <span onClick={() => likeTweet(tweet.id)} className="likes"> 
               <img height="13px" src={heart}/>
-              <span>4</span>
+              <span>{tweet.likes ? tweet.likes : 0}</span>
             </span>
           </div>
         );
