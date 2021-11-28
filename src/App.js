@@ -10,10 +10,7 @@ export default function App() {
   });
 
   useEffect(() => {
-    firestore
-      .collection("tweets")
-      .get()
-      .then((snapshot) => {
+    const cancelarSuscripcion = firestore.collection("tweets").onSnapshot((snapshot) => {
         const tweets = snapshot.docs.map((doc) => {
           return {
             tweet: doc.data().tweet,
@@ -23,6 +20,7 @@ export default function App() {
         });
         setTweets(tweets);
       });
+      return () => cancelarSuscripcion();
   }, []);
 
   const handleChange = (e) => {
@@ -39,28 +37,10 @@ export default function App() {
   const sendTweet = (e) => {
     e.preventDefault();
     
-    let enviarTweet = firestore.collection("tweets").add(tweet);
-    
-    let solicitarDocumento = enviarTweet.then((docRef) => {
-     
-    return docRef.get();
-    });
-   
-    solicitarDocumento.then((doc) => {
-      let nuevoTweet = {
-        tweet: doc.data().tweet,
-        autor: doc.data().autor,
-        id: doc.id
-      };
-      setTweets([nuevoTweet, ...tweets]);
-    });
+    firestore.collection("tweets").add(tweet);
   };
 
   const deleteTweet = (id) => {
-    const nuevosTweets = tweets.filter((tweet) => {
-      return tweet.id !== id;
-    })
-    setTweets(nuevosTweets);
     firestore.doc(`tweets/${id}`).delete();
   }
 
