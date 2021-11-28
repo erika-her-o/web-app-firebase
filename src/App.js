@@ -1,6 +1,7 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
 import { firestore } from "./firebase";
+import heart from "./icons/heart.svg"
 
 export default function App() {
   const [tweets, setTweets] = useState([]);
@@ -44,6 +45,10 @@ export default function App() {
     firestore.doc(`tweets/${id}`).delete();
   }
 
+  const actualizarDoc = (id, algunParametro) => {
+    firestore.doc(`tweets/${id}`).update({unaPropiedad: algunParametro})
+  }
+
  return (
   <div className="App">
     <form className="form">
@@ -64,6 +69,11 @@ export default function App() {
                 <span onClick={() => deleteTweet(tweet.id)} className="delete">X</span>
             </h1>
             <h4>por: {tweet.autor}</h4>
+            {/* <span>{tweet.likes}</span> */}
+            <span className="likes"> 
+              <img height="13px" src={heart}/>
+              <span>4</span>
+            </span>
           </div>
         );
       })}
