@@ -11,19 +11,19 @@ const firebaseConfig = {
     appId: "1:667417469035:web:041b813ccf98423de1512e"
   };
   
-// Initialize Firebase
+//Inicializa Firebase
 firebase.initializeApp(firebaseConfig);
-// Exporta la funcionalidad de la DB
+// Exporta la funcionalidad de la base de datos
 export const firestore = firebase.firestore();
 
-//el modulo de autenticación
+// el módulo de autenticacíon
 export const auth = firebase.auth();
-//el provedor de autenticación
+// el provedor de autenticación
 export const provider = new firebase.auth.GoogleAuthProvider();
-//la utilidad para hacer login con el pop up
-export const logginConGoogle = auth.signInWithPopup(provider);
-//la utilidad para haver logout
+// la utilidad para hacer login con el pop-up
+export const loginConGoogle = () => auth.signInWithPopup(provider);
+// la utilidad para hacer logout
 export const logout = () => auth.signOut();
 
-// exporta el paquete de firebase para poder usarlo
+// Exporta el paquete firebase para otros usos
 export default firebase;

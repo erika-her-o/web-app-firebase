@@ -1,6 +1,6 @@
 import "./App.css";
 import React, { useEffect, useState } from 'react';
-import { firestore, logginConGoogle, auth, logout } from './firebase';
+import { firestore, loginConGoogle, auth, logout } from './firebase';
 import heart from './icons/heart.svg';
 
 export default function App() {
@@ -9,9 +9,12 @@ export default function App() {
     tweet: "",
     autor: ""
   });
+  const [ user, setUser] = useState(null);
 
   useEffect(() => {
-    const cancelarSuscripcion = firestore.collection("tweets").onSnapshot((snapshot) => {
+    const desuscribir = firestore
+      .collection("tweets")
+      .onSnapshot((snapshot) => {
         const tweets = snapshot.docs.map((doc) => {
           return {
             tweet: doc.data().tweet,
@@ -22,17 +25,22 @@ export default function App() {
         });
         setTweets(tweets);
       });
-      return () => cancelarSuscripcion();
+
+    auth.onAuthStateChanged((user) => {
+      setUser(user);
+      console.log(user);
+    });
+    return () => desuscribir();
   }, []);
 
   const handleChange = (e) => {
     let newTweet = {
       ...tweet,
       [e.target.name]: e.target.value
-    }
+    };
 
     setTweet(newTweet);
-  }
+  };
 
   // console.log(tweet);
   
@@ -55,13 +63,26 @@ export default function App() {
 
  return (
   <div className="App">
+    {user ? (
+        <>
+          <div className="user-profile">
+            <img className="user-profile-pic" src={user.photoURL} alt="" />
+            <p>¡Hola {user.displayName}!</p>
+            <button onClick={logout}>Log out</button>
+          </div>
+        </>
+      ) : (
+        <button className="login-btn" onClick={loginConGoogle}>
+          Login con google
+        </button>
+      )}
     <div className="post flex">
       <form className="form">
-        <textarea name="tweet" onChange={handleChange} value={tweet.tweet} rows="5" cols="30" placeholder= "What's happening ?"/>
-        
-        <div className="input-group"> 
-          <input name="autor"  onChange={handleChange} value={tweet.autor} type="text" placeholder="Written by"/>
-          <button onClick={sendTweet}>POST</button>
+      <textarea
+          name="tweet" onChange={handleChange} value={tweet.tweet} cols="30" rows="5" placeholder="escribe un tweet..."/>
+        <div className="input-group">
+          <input name="autor" onChange={handleChange} value={tweet.autor} type="text" placeholder="persona autora"/>
+          <button onClick={sendTweet}>Enviar tweet</button>
         </div>
       </form>
     </div>
@@ -78,7 +99,7 @@ export default function App() {
               <h4>por: {tweet.autor}</h4>
               {/* <span>{tweet.likes}</span> */}
               <span onClick={() => likeTweet(tweet.id)} className="likes"> 
-                <img src={heart}/>
+                <img src={heart} alt=""/>
                 <span>{tweet.likes ? tweet.likes : 0}</span>
               </span>
             </div>
