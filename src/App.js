@@ -1,7 +1,7 @@
 import "./App.css";
-import React, { useEffect, useState } from "react";
-import { firestore } from "./firebase";
-import heart from "./icons/heart.svg"
+import React, { useEffect, useState } from 'react';
+import { firestore, logginConGoogle, auth, logout } from './firebase';
+import heart from './icons/heart.svg';
 
 export default function App() {
   const [tweets, setTweets] = useState([]);
@@ -55,33 +55,38 @@ export default function App() {
 
  return (
   <div className="App">
-    <form className="form">
-      <textarea name="tweet" onChange={handleChange} value={tweet.tweet} rows="5" cols="30" placeholder= "Write something here"/>
-      
-      <div className="input-group"> 
-        <input name="autor"  onChange={handleChange} value={tweet.autor} type="text" placeholder="Written by"/>
-        <button onClick={sendTweet}>send tweet</button>
-      </div>
-    </form>
-
-    <div className="container-tweet">
-      <h1>Tweets:</h1>
-      {tweets.map((tweet) => {
-        return (
-          <div  className="message" key={tweet.id}>
-            <h1>{tweet.tweet}
-                <span onClick={() => deleteTweet(tweet.id)} className="delete">X</span>
-            </h1>
-            <h4>por: {tweet.autor}</h4>
-            {/* <span>{tweet.likes}</span> */}
-            <span onClick={() => likeTweet(tweet.id)} className="likes"> 
-              <img height="13px" src={heart}/>
-              <span>{tweet.likes ? tweet.likes : 0}</span>
-            </span>
-          </div>
-        );
-      })}
+    <div className="post flex">
+      <form className="form">
+        <textarea name="tweet" onChange={handleChange} value={tweet.tweet} rows="5" cols="30" placeholder= "What's happening ?"/>
+        
+        <div className="input-group"> 
+          <input name="autor"  onChange={handleChange} value={tweet.autor} type="text" placeholder="Written by"/>
+          <button onClick={sendTweet}>POST</button>
+        </div>
+      </form>
     </div>
+    
+    <div className="container-tweet-global flex">
+      <div className="container-tweet">
+        <h1>Tweets:</h1>
+        {tweets.map((tweet) => {
+          return (
+            <div  className="message" key={tweet.id}>
+              <h1>{tweet.tweet}
+                  <span onClick={() => deleteTweet(tweet.id)} className="delete">X</span>
+              </h1>
+              <h4>por: {tweet.autor}</h4>
+              {/* <span>{tweet.likes}</span> */}
+              <span onClick={() => likeTweet(tweet.id)} className="likes"> 
+                <img src={heart}/>
+                <span>{tweet.likes ? tweet.likes : 0}</span>
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+    
   </div>
 );
 }
