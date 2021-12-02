@@ -65,7 +65,7 @@ export default function App() {
   <div className="App">
     {user ? (
         <>
-          <div className="user-profile">
+          <div className="user-profile flex">
             <img className="user-profile-pic" src={user.photoURL} alt="" />
             <p>¡Hola {user.displayName}!</p>
             <button onClick={logout}>Log out</button>
@@ -94,7 +94,7 @@ export default function App() {
           return (
             <div  className="message" key={tweet.id}>
               <h1>{tweet.tweet}
-                  <span onClick={() => deleteTweet(tweet.id)} className="delete">X</span>
+                  <span onClick={() => deleteTweet(tweet.id)} className="delete">Borrar</span>
               </h1>
               <h4>por: {tweet.autor}</h4>
               {/* <span>{tweet.likes}</span> */}
