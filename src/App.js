@@ -12,8 +12,7 @@ export default function App() {
   const [ user, setUser] = useState(null);
 
   useEffect(() => {
-    const desuscribir = firestore
-      .collection("tweets")
+    const desuscribir = firestore.collection("tweets")
       .onSnapshot((snapshot) => {
         const tweets = snapshot.docs.map((doc) => {
           return {
@@ -30,6 +29,7 @@ export default function App() {
       setUser(user);
       console.log(user);
     });
+    
     return () => desuscribir();
   }, []);
 
