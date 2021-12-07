@@ -7,7 +7,9 @@ export default function App() {
   const [tweets, setTweets] = useState([]);
   const [tweet, setTweet] = useState({
     tweet: "",
-    autor: ""
+    autor: "",
+    uid:"",
+    mail:""
   });
   const [ user, setUser] = useState(null);
 
@@ -19,7 +21,9 @@ export default function App() {
             tweet: doc.data().tweet,
             autor: doc.data().autor,
             id: doc.id,
-            likes: doc.data().likes
+            likes: doc.data().likes,
+            email: doc.data().email,
+            uid: doc.data().uid
           };
         });
         setTweets(tweets);
@@ -35,8 +39,10 @@ export default function App() {
 
   const handleChange = (e) => {
     let newTweet = {
-      ...tweet,
-      [e.target.name]: e.target.value
+      tweet: e.target.value,
+      uid: user.uid,
+      email: user.email,
+      autor: user.displayName
     };
 
     setTweet(newTweet);
@@ -91,13 +97,16 @@ export default function App() {
       <div className="container-tweet">
         <h1>Tweets:</h1>
         {tweets.map((tweet) => {
+
           return (
             <div  className="message" key={tweet.id}>
               <h1>{tweet.tweet}
                   <span onClick={() => deleteTweet(tweet.id)} className="delete">Borrar</span>
               </h1>
-              <h4>por: {tweet.autor}</h4>
-              {/* <span>{tweet.likes}</span> */}
+
+              <h4 className="tweet-autor">por: {tweet.autor}</h4>
+              <h4 className="tweet-autor">por: {tweet.email}</h4>
+
               <span onClick={() => likeTweet(tweet.id)} className="likes"> 
                 <img src={heart} alt=""/>
                 <span>{tweet.likes ? tweet.likes : 0}</span>
