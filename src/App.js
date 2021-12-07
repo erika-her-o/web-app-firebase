@@ -9,7 +9,7 @@ export default function App() {
     tweet: "",
     autor: "",
     uid:"",
-    mail:""
+    email:""
   });
   const [ user, setUser] = useState(null);
 
@@ -100,14 +100,15 @@ export default function App() {
 
           return (
             <div  className="message" key={tweet.id}>
-              <h1>{tweet.tweet}
+            {user && user.uid === tweet.uid &&  <h1>{tweet.tweet}
                   <span onClick={() => deleteTweet(tweet.id)} className="delete">Borrar</span>
               </h1>
+            }
 
               <h4 className="tweet-autor">por: {tweet.autor}</h4>
               <h4 className="tweet-autor">por: {tweet.email}</h4>
 
-              <span onClick={() => likeTweet(tweet.id)} className="likes"> 
+              <span onClick={() => likeTweet(tweet.id, tweet.like)} className="likes"> 
                 <img src={heart} alt=""/>
                 <span>{tweet.likes ? tweet.likes : 0}</span>
               </span>
